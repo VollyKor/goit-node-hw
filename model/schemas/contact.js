@@ -1,12 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 
-const SUBSCRIPTION = {
-    FREE: 'free',
-    PRO: 'pro',
-    PREMIUM: 'premium',
-}
-
 const contactSchema = new Schema(
     {
         name: {
@@ -25,19 +19,19 @@ const contactSchema = new Schema(
 
         date: { type: Date, default: () => Date.now() },
 
-        subscription: {
-            type: String,
-            enum: [SUBSCRIPTION.FREE, SUBSCRIPTION.PRO, SUBSCRIPTION.PREMIUM],
-            default: SUBSCRIPTION.FREE,
-        },
-        password: {
-            type: String,
-            default: 'password',
-        },
-        token: {
-            type: String,
-            default: '',
-        },
+        // subscription: {
+        //     type: String,
+        //     enum: [SUBSCRIPTION.FREE, SUBSCRIPTION.PRO, SUBSCRIPTION.PREMIUM],
+        //     default: SUBSCRIPTION.FREE,
+        // },
+        // password: {
+        //     type: String,
+        //     default: 'password',
+        // },
+        // token: {
+        //     type: String,
+        //     default: '',
+        // },
     },
     { versionKey: false, timestamps: true },
 )

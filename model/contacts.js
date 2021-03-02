@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Contacts = require('./index')
-const validate = require('../routes/api/validation')
+const validateContact = require('../routes/api/contact')
 
 router.get('/', async (req, res, next) => {
     try {
@@ -39,7 +39,7 @@ router.get('/:contactId', async (req, res, next) => {
     }
 })
 
-router.post('/', validate.AddContact, async (req, res, next) => {
+router.post('/', validateContact.AddContact, async (req, res, next) => {
     try {
         const contact = await Contacts.add(req.body)
         return res.status(201).json({
