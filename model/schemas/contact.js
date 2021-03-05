@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { Schema, model } = mongoose
+const { Schema, model, SchemaTypes } = mongoose
 
 const contactSchema = new Schema(
     {
@@ -18,20 +18,10 @@ const contactSchema = new Schema(
         },
 
         date: { type: Date, default: () => Date.now() },
-
-        // subscription: {
-        //     type: String,
-        //     enum: [SUBSCRIPTION.FREE, SUBSCRIPTION.PRO, SUBSCRIPTION.PREMIUM],
-        //     default: SUBSCRIPTION.FREE,
-        // },
-        // password: {
-        //     type: String,
-        //     default: 'password',
-        // },
-        // token: {
-        //     type: String,
-        //     default: '',
-        // },
+        owner: {
+            type: SchemaTypes.ObjectId,
+            ref: 'user',
+        },
     },
     { versionKey: false, timestamps: true },
 )

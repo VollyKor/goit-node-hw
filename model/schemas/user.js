@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const SUBSCRIPTION = require('../../helpers/constants')
 const bcrypt = require('bcryptjs')
 const SALT_WORK_FACTOR = 8
 
@@ -17,6 +18,11 @@ const userSchema = new Schema(
                 const re = /\S+@\S+\.\S+/
                 return re.test(String(value).toLowerCase())
             },
+        },
+        subscription: {
+            type: String,
+            enum: [SUBSCRIPTION.FREE, SUBSCRIPTION.PRO, SUBSCRIPTION.PREMIUM],
+            default: SUBSCRIPTION.FREE,
         },
         password: {
             type: String,
