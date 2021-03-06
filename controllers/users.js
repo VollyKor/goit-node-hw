@@ -66,7 +66,17 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
     const id = req.user.id
     await Users.updateToken(id, null)
-    return res.status(HttpCode.NO_CONTENT).json({ Status: 'No Content' })
+    return res.status(HttpCode.NO_CONTENT).json()
 }
 
-module.exports = { reg, login, logout }
+const current = async (req, res, next) => {
+    const token = req.get('Authorization').slice(7)
+    const user = await Users.findByToken(token)
+    console.log(user)
+    return res.status(200).json({
+        email: user.email,
+        subscription: user.subscription,
+    })
+}
+
+module.exports = { reg, login, logout, current }

@@ -7,6 +7,9 @@ const findByEmail = async email => {
 const findById = async id => {
     return await User.findOne({ _id: id })
 }
+const findByToken = async token => {
+    return await User.findOne({ token })
+}
 
 const create = async ({ name, email, password, sex }) => {
     const user = new User({ name, email, password, sex })
@@ -20,6 +23,7 @@ const updateToken = async (id, token) => {
 module.exports = {
     findByEmail,
     findById,
+    findByToken,
     create,
     updateToken,
 }
