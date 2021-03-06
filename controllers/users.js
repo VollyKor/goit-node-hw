@@ -54,6 +54,8 @@ const login = async (req, res, next) => {
             code: HttpCode.OK,
             data: {
                 token,
+                email: user.email,
+                subscription: user.subscription,
             },
         })
     } catch (e) {
@@ -64,7 +66,7 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
     const id = req.user.id
     await Users.updateToken(id, null)
-    return res.status(HttpCode.NO_CONTENT).json({})
+    return res.status(HttpCode.NO_CONTENT).json({ Status: 'No Content' })
 }
 
 module.exports = { reg, login, logout }

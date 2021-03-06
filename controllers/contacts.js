@@ -3,7 +3,6 @@ const Contacts = require('../model/contacts')
 const getAll = async (req, res, next) => {
     try {
         const userId = req.user.id
-        console.log('userId', userId)
         const data = await Contacts.getAll(userId)
         return res.json({
             status: 'success',
