@@ -17,6 +17,7 @@ const reg = async (req, res, next) => {
                 message: 'Email is already use',
             })
         }
+
         const newUser = await Users.create(req.body)
         return res.status(HttpCode.CREATED).json({
             status: 'success',

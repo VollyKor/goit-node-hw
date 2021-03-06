@@ -40,7 +40,8 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
     try {
-        const contact = await Contacts.add(req.body)
+        const userId = req.user.id
+        const contact = await Contacts.add({ ...req.body, owner: userId })
         return res.status(201).json({
             status: 'succes',
             code: 201,

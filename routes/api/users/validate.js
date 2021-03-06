@@ -16,6 +16,21 @@ const validateUser = (schema, obj, next) => {
     next()
 }
 
+const validateRegistration = (schema, obj, next) => {
+    const { error } = schema.validate(obj)
+    if (error) {
+        const [{ message }] = error.details
+        return next({
+            status: 400,
+            message: `Filed: ${message.replace(/"/g, '')}`,
+        })
+    }
+    next()
+}
+
 module.exports.validateCredentials = (req, res, next) => {
     return validateUser(schemaValidateUser, req.body, next)
+}
+module.exports.validateRegistration = (req, res, next) => {
+    return validateRegistration(schemaValidateUser, req.body, next)
 }
