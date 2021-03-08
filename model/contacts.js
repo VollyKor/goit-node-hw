@@ -1,89 +1,52 @@
-const express = require('express')
-const router = express.Router()
-const Contacts = require('./index')
-const validate = require('../routes/api/validation')
+const Contact = require('./schemas/contact')
 
-router.get('/', async (req, res, next) => {
-    try {
-        const data = await Contacts.getAll()
-        return res.json({
-            status: 'success',
-            code: 200,
-            data: data,
-        })
-    } catch (e) {
-        next(e)
-    }
-})
+const getAll = async (
+    userId,
+    { sortBy, sortByDesc, filter, limit = 5, offset = 0 },
+) => {
+    const results = await Contact.paginate(
+        { owner: userId },
+        {
+            limit,
+            offset,
+            sort: {
+                ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+                ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+            },
+            select: filter ? filter.split('|').join(' ') : '',
+            populate: {
+                path: 'owner',
+                select: 'name, email -_id',
+            },
+        },
+    )
 
-router.get('/:contactId', async (req, res, next) => {
-    try {
-        const contactId = req.params.contactId
-        const contact = await Contacts.getById(contactId)
+    const { docs: contacts, totalDocs: total } = results
+    return { limit, offset, contacts, total }
+}
 
-        if (contact) {
-            return res.json({
-                status: 'success',
-                code: 200,
-                data: contact,
-            })
-        }
+const getById = async (contactId, userId) =>
+    await Contact.findOne({ _id: contactId, owner: userId }).populate({
+        path: 'owner',
+        select: 'name, email -_id',
+    })
 
-        return res.status(404).json({
-            status: 'error',
-            code: 404,
-            data: 'Contact not found',
-        })
-    } catch (e) {
-        next(e)
-    }
-})
+const add = async contactObj => await Contact.create(contactObj)
 
-router.post('/', validate.AddContact, async (req, res, next) => {
-    try {
-        const contact = await Contacts.add(req.body)
-        return res.status(201).json({
-            status: 'succes',
-            code: 201,
-            data: contact,
-        })
-    } catch (error) {
-        next(error)
-    }
-})
+const remove = async id => await Contact.findByIdAndRemove({ _id: id })
 
-router.delete('/:contactId', async (req, res, next) => {
-    try {
-        const contactId = req.params.contactId
-        const isSucces = await Contacts.remove(contactId)
+const update = async (id, contactObj) => {
+    return await Contact.findByIdAndUpdate(
+        { _id: id },
+        { ...contactObj },
+        { new: true },
+    )
+}
 
-        if (isSucces) {
-            return res.status(200).json({ message: 'contact deleted' })
-        }
-
-        return res.status(404).json({ message: 'Not Found' })
-    } catch (error) {
-        next(error)
-    }
-})
-
-router.patch('/:contactId', async (req, res, next) => {
-    try {
-        const contactId = req.params.contactId
-        const data = await Contacts.update(contactId, req.body)
-
-        if (data) {
-            return res.status(200).json({
-                status: 'success',
-                code: 200,
-                data,
-            })
-        }
-
-        return res.status(404).json({ message: 'Not Found' })
-    } catch (error) {
-        next(error)
-    }
-})
-
-module.exports = router
+module.exports = {
+    getAll,
+    getById,
+    remove,
+    add,
+    update,
+}
