@@ -1,6 +1,16 @@
 const jwt = require('jsonwebtoken')
 const Users = require('../model/users')
-const { HttpCode } = require('../helpers/constants')
+const { HttpCode, AVATARS_OF_USERS } = require('../helpers/constants')
+const {
+    UPLOAD_FOLDER,
+    PUBLIC_FOLDER,
+    PUBLIC_IMAGES_FOLDER,
+} = require('../helpers/constants')
+const fs = require('fs').promises
+const path = require('path')
+const Jimp = require('jimp')
+const createFolderIsExist = require('../helpers/create-dir')
+const User = require('../model/schemas/user')
 
 require('dotenv').config()
 const SECRET_KEY = process.env.JWT_SECRET
@@ -84,4 +94,45 @@ const current = async (req, res, next) => {
     })
 }
 
-module.exports = { reg, login, logout, current }
+const avatar = async (req, res, next) => {
+    try {
+        const id = req.user.id
+        const avatarPath = req.file.path
+        const newNameFile = `${Date.now()}-${file.originalName}`
+        const img = await Jimp.read(avatarPath)
+
+        img.autocrop()
+            .cover(
+                300,
+                300,
+                Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
+            )
+            .writeAsync(avatarPath)
+
+        await createFolderIsExist(path.join(PUBLIC_IMAGES_FOLDER, id))
+        await fs.rename(
+            avatarPath,
+            path.join(PUBLIC_IMAGES_FOLDER, id, newNameFile),
+        )
+
+        const avatarUrl = path.normalize(path.join(id, newNameFile))
+
+        try {
+            await fs.unlink(AVATARS_OF_USERS, req.user.avatar)
+        } catch (e) {
+            console.log(e.message)
+        }
+
+        await Users.updateAvatar(id, avatarUrl)
+
+        return res.status(200).json({
+            status: 'success',
+            code: HttpCode.OK,
+            data: { avatarUrl },
+        })
+    } catch (e) {
+        next(e)
+    }
+}
+
+module.exports = { reg, login, logout, current, avatar }
