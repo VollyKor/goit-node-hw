@@ -27,6 +27,7 @@ const reg = async (req, res, next) => {
                 id: newUser.id,
                 email: newUser.email,
                 name: newUser.name,
+                avatar: newUser.avatar,
             },
         })
     } catch (e) {
@@ -38,7 +39,7 @@ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
-        const isValidPassword = await user.validPassword(password)
+        const isValidPassword = await user?.validPassword(password)
         if (!user || !isValidPassword) {
             return res.status(HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -51,13 +52,15 @@ const login = async (req, res, next) => {
         const payload = { id }
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
         await Users.updateToken(id, token)
+        const { subscription, avatar } = user
         return res.status(HttpCode.OK).json({
             status: 'success',
             code: HttpCode.OK,
             data: {
                 token,
-                email: user.email,
-                subscription: user.subscription,
+                email,
+                subscription,
+                avatar,
             },
         })
     } catch (e) {

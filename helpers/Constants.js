@@ -1,3 +1,5 @@
+const path = require('path')
+
 const SUBSCRIPTION = {
     FREE: 'free',
     PRO: 'pro',
@@ -15,7 +17,10 @@ const HttpCode = {
     INTERNAL_SERVER_ERROR: 500,
 }
 
+const AVATARS_OF_USERS = path.join(process.cwd(), 'public', 'images')
+
 module.exports = {
     SUBSCRIPTION,
     HttpCode,
+    AVATARS_OF_USERS,
 }

@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const { AVATARS_OF_USERS } = require('./helpers/constants')
 
 const contactsRouter = require('./routes/api/contacts')
 const userRouter = require('./routes/api/users')
@@ -13,6 +14,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use(express.static(AVATARS_OF_USERS))
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', userRouter)
 

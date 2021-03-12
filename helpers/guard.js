@@ -8,10 +8,11 @@ const guard = (req, res, next) => {
             status: 'error',
             code: HttpCode.UNAUTHORIZED,
             data: 'Unauthorized',
+            avatar: 'user_avatar_URL',
         })
     }
     passport.authenticate('jwt', { session: false }, (err, user) => {
-        const [, token] = req.get('Authorization').split(' ')
+        const token = req.get('Authorization')?.split(' ')[1]
         if (!user || err || token !== user.token) {
             return res.status(HttpCode.FORBIDDEN).json({
                 status: 'error',

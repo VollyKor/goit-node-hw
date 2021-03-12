@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const path = require('path')
 const { SUBSCRIPTION } = require('../../helpers/constants')
 const bcrypt = require('bcryptjs')
 const SALT_WORK_FACTOR = 8
@@ -30,6 +31,10 @@ const userSchema = new Schema(
         token: {
             type: String,
             default: null,
+        },
+        avatar: {
+            type: String,
+            default: () => path.join(process.cwd(), 'empty-user.svg'),
         },
     },
     { versionKey: false, timestamps: true },
