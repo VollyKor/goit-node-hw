@@ -1,15 +1,8 @@
 const jwt = require('jsonwebtoken')
 const Users = require('../model/users')
-const { HttpCode, AVATARS_OF_USERS } = require('../helpers/constants')
-const {
-    UPLOAD_FOLDER,
-    PUBLIC_FOLDER,
-    PUBLIC_IMAGES_FOLDER,
-} = require('../helpers/constants')
-const fs = require('fs').promises
-const path = require('path')
-const Jimp = require('jimp')
-const createFolderIsExist = require('../helpers/create-dir')
+const { HttpCode } = require('../helpers/constants')
+const handleAvatar = require('../helpers/handleAvatar')
+
 const User = require('../model/schemas/user')
 
 require('dotenv').config()
@@ -86,49 +79,36 @@ const logout = async (req, res, next) => {
 
 const current = async (req, res, next) => {
     const token = req.get('Authorization').slice(7)
-    const user = await Users.findByToken(token)
-    console.log(user)
+    const { email, subscription, avatar } = await Users.findByToken(token)
     return res.status(200).json({
-        email: user.email,
-        subscription: user.subscription,
+        email,
+        subscription,
+        avatar,
     })
 }
 
 const avatar = async (req, res, next) => {
     try {
         const id = req.user.id
-        const avatarPath = req.file.path
-        const newNameFile = `${Date.now()}-${file.originalName}`
-        const img = await Jimp.read(avatarPath)
 
-        img.autocrop()
-            .cover(
-                300,
-                300,
-                Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
-            )
-            .writeAsync(avatarPath)
+        //static
+        // ======================================
+        // const avatarUrl = await handleAvatar.saveAvatarToStatic(req)
 
-        await createFolderIsExist(path.join(PUBLIC_IMAGES_FOLDER, id))
-        await fs.rename(
-            avatarPath,
-            path.join(PUBLIC_IMAGES_FOLDER, id, newNameFile),
-        )
+        // cloudinary
+        // ========================================
+        const {
+            public_id: imgIdCloud,
+            secure_url: avatarUrl,
+        } = await handleAvatar.saveAvatarToCloud(req)
 
-        const avatarUrl = path.normalize(path.join(id, newNameFile))
-
-        try {
-            await fs.unlink(AVATARS_OF_USERS, req.user.avatar)
-        } catch (e) {
-            console.log(e.message)
-        }
-
-        await Users.updateAvatar(id, avatarUrl)
-
-        return res.status(200).json({
+        await Users.updateAvatar(id, avatarUrl, imgIdCloud)
+        return res.json({
             status: 'success',
             code: HttpCode.OK,
-            data: { avatarUrl },
+            data: {
+                avatarUrl,
+            },
         })
     } catch (e) {
         next(e)

@@ -14,6 +14,10 @@ router.post(
 router.post('/login', validateUser.validateCredentials, userController.login)
 router.post('/logout', guard, userController.logout)
 router.get('/current', guard, userController.current)
-router.patch('/avatars', guard, upload.single('avatar'), userController.avatar)
+router.patch(
+    '/avatars',
+    [guard, upload.single('avatar'), validateUser.validateUploadAvatar],
+    userController.avatar,
+)
 
 module.exports = router

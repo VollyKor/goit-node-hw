@@ -18,7 +18,7 @@ const HttpCode = {
 }
 
 const PUBLIC_FOLDER = 'public'
-const PUBLIC_IMAGES_FOLDER = ' images'
+const PUBLIC_IMAGES_FOLDER = 'images'
 const AVATARS_OF_USERS = path.join(
     process.cwd(),
     PUBLIC_FOLDER,
