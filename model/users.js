@@ -11,8 +11,8 @@ const findByToken = async token => {
     return await User.findOne({ token })
 }
 
-const create = async ({ name, email, password, sex }) => {
-    const user = new User({ name, email, password, sex })
+const create = async ({ name, email, password }) => {
+    const user = new User({ name, email, password })
     return await user.save()
 }
 
