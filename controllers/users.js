@@ -3,8 +3,6 @@ const Users = require('../model/users')
 const { HttpCode } = require('../helpers/constants')
 const handleAvatar = require('../helpers/handleAvatar')
 
-const User = require('../model/schemas/user')
-
 require('dotenv').config()
 const SECRET_KEY = process.env.JWT_SECRET
 
@@ -22,15 +20,15 @@ const reg = async (req, res, next) => {
             })
         }
 
-        const newUser = await Users.create(req.body)
+        const { id, name, avatar, token } = await Users.create(req.body)
         return res.status(HttpCode.CREATED).json({
             status: 'success',
             code: HttpCode.CREATED,
             data: {
-                id: newUser.id,
-                email: newUser.email,
-                name: newUser.name,
-                avatar: newUser.avatar,
+                id,
+                email,
+                name,
+                avatar,
             },
         })
     } catch (e) {

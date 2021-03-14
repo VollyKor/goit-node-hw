@@ -47,7 +47,7 @@ module.exports.saveAvatarToCloud = async req => {
     try {
         await fs.unlink(pathFile)
     } catch (e) {
-        console.log(e.message)
+        console.log('1111', e.message)
     }
     return result
 }

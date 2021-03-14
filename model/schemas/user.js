@@ -34,7 +34,11 @@ const userSchema = new Schema(
         },
         avatar: {
             type: String,
-            default: () => path.join(process.cwd(), 'empty-user.svg'),
+            default: null,
+        },
+        imgIdCloud: {
+            type: String,
+            default: null,
         },
     },
     { versionKey: false, timestamps: true },
