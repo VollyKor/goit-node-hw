@@ -8,7 +8,7 @@ const getAll = jest.fn(
 
 const getById = jest.fn((contactId, userId) => {
     const [contact] = contacts.filter(
-        el => toString(el._id) === toString(contactId),
+        el => String(el._id) === String(contactId),
     )
     return contact
 })
@@ -20,13 +20,17 @@ const add = jest.fn(contactObj => {
 })
 
 const update = jest.fn((id, contactObj) => {
-    const [contact] = contacts.filter(el => toString(el._id) === toString(id))
-    return { ...contact, ...contactObj }
+    const [contact] = contacts.filter(el => String(el._id) === String(id))
+
+    if (contact) return { ...contact[0], ...contactObj }
+
+    return null
 })
 
 const remove = jest.fn(id => {
     const index = contacts.findIndex(e => e._id === id)
-    if (index === -1) null
+
+    if (index === -1) return null
 
     const deletedContact = contacts.splice(index, 1)
     return deletedContact

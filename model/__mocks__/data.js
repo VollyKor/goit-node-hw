@@ -33,13 +33,16 @@ const contacts = [
     },
 ]
 
+const wrongId = '604290563197180a6436ec41'
+
 const newContact = {
     name: 'asd',
+    email: 'asd@gmail.com',
     phone: '123123123',
 }
 
 const User = {
-    _id: '604db1902523ea15f8158df8',
+    _id: '604b77d4a6291b237c796b90',
     name: 'Guest',
     subscription: 'free',
     token:
@@ -54,6 +57,7 @@ const User = {
 }
 
 const Users = [
+    User,
     {
         _id: '604db1902523ea15f8158df8',
         name: 'Guest',
@@ -115,6 +119,7 @@ const userTemplate = {
 }
 
 module.exports = {
+    wrongId,
     contacts,
     Users,
     User,

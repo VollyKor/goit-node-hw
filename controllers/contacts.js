@@ -26,14 +26,21 @@ const getById = async (req, res, next) => {
                 code: 200,
                 data: contact,
             })
+        } else {
+            return res.status(404).json({
+                status: 'error',
+                code: 404,
+                data: 'Contact not found',
+            })
         }
-
-        return res.status(404).json({
-            status: 'error',
-            code: 404,
-            data: 'Contact not found',
-        })
     } catch (e) {
+        if (e.value.length !== 24) {
+            return res.status(404).json({
+                status: 'error',
+                code: 404,
+                data: 'Invalid id',
+            })
+        }
         next(e)
     }
 }
@@ -47,8 +54,8 @@ const add = async (req, res, next) => {
             code: 201,
             data: contact,
         })
-    } catch (error) {
-        next(error)
+    } catch (e) {
+        next(e)
     }
 }
 
@@ -62,16 +69,17 @@ const remove = async (req, res, next) => {
         }
 
         return res.status(404).json({ message: 'Not Found' })
-    } catch (error) {
-        next(error)
+    } catch (e) {
+        next(e)
     }
 }
 
 const update = async (req, res, next) => {
     try {
         const contactId = req.params.contactId
-        const data = await Contacts.update(contactId, req.body)
+        const userId = req.user.id
 
+        const data = await Contacts.update(contactId, req.body, userId)
         if (data) {
             return res.status(200).json({
                 status: 'success',
@@ -81,8 +89,8 @@ const update = async (req, res, next) => {
         }
 
         return res.status(404).json({ message: 'Not Found' })
-    } catch (error) {
-        next(error)
+    } catch (e) {
+        next(e)
     }
 }
 

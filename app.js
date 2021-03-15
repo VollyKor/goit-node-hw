@@ -24,11 +24,8 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     if (err.status === 400) {
-        res.status(400)
-        res.json(err)
-        return
+        return res.status(400).json(err)
     }
-
     res.status(500).json({ message: err.message })
 })
 

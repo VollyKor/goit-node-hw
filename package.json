@@ -8,7 +8,7 @@
         "lint": "eslint **/*.{js, json}",
         "lint:fix": "eslint --fix **/*.js",
         "test": "cross-env Node_ENV=test jest --no-cache --verbose",
-        "test:covarage": "jest --covarage",
+        "test:coverage": "jest --coverage",
         "test:watch": "jest --watchAll"
     },
     "dependencies": {

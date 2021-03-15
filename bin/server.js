@@ -1,6 +1,6 @@
 const app = require('../app')
 const db = require('../model/db')
-const createFolderIsExist = require('../helpers/create-dir')
+const createFolderIsExist = require('../utils/create-dir')
 const { UPLOAD_FOLDER, AVATARS_OF_USERS } = require('../helpers/constants')
 
 const PORT = process.env.PORT || 3000

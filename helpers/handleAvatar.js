@@ -4,7 +4,7 @@ const { uploadCloud } = require('./cloudinary')
 const cloudinary = require('cloudinary').v2
 const path = require('path')
 const Jimp = require('jimp')
-const createFolderIsExist = require('../helpers/create-dir')
+const createFolderIsExist = require('../utils/create-dir')
 
 module.exports.saveAvatarToStatic = async req => {
     const id = req.user.id

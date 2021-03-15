@@ -11,6 +11,6 @@ router
 router
     .get('/:contactId', guard, Contacts.getById)
     .delete('/:contactId', guard, Contacts.remove)
-    .patch('/:contactId', guard, Contacts.update)
+    .patch('/:contactId', guard, validateContact.UpdateContact, Contacts.update)
 
 module.exports = router
