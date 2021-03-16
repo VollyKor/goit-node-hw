@@ -23,13 +23,11 @@ const create = jest.fn(({ name, email, password }) => {
 })
 
 const updateToken = jest.fn((id, token) => {
-    const [user] = Users.filter(el => toString(el._id) === toString(id))
-    return (user.token = token)
+    return {}
 })
 
 const updateAvatar = jest.fn((id, avatar, imgIdCloud) => {
-    const [user] = Users.filter(el => toString(el._id) === toString(id))
-    return { ...user, avatar, imgIdCloud }
+    return {}
 })
 
 module.exports = {

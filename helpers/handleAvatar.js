@@ -6,33 +6,33 @@ const path = require('path')
 const Jimp = require('jimp')
 const createFolderIsExist = require('../utils/create-dir')
 
-module.exports.saveAvatarToStatic = async req => {
-    const id = req.user.id
-    const avatarPath = req.file.path
-    const newNameFile = `${Date.now()}-${req.file.originalname}`
+// module.exports.saveAvatarToStatic = async req => {
+//     const id = req.user.id
+//     const avatarPath = req.file.path
+//     const newNameFile = `${Date.now()}-${req.file.originalname}`
 
-    const img = await Jimp.read(avatarPath)
-    img.autocrop()
-        .cover(
-            300,
-            300,
-            Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
-        )
-        .writeAsync(avatarPath)
+//     const img = await Jimp.read(avatarPath)
+//     img.autocrop()
+//         .cover(
+//             300,
+//             300,
+//             Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
+//         )
+//         .writeAsync(avatarPath)
 
-    await createFolderIsExist(path.join(AVATARS_OF_USERS, id))
+//     await createFolderIsExist(path.join(AVATARS_OF_USERS, id))
 
-    await fs.rename(avatarPath, path.join(AVATARS_OF_USERS, id, newNameFile))
+//     await fs.rename(avatarPath, path.join(AVATARS_OF_USERS, id, newNameFile))
 
-    const avatarUrl = path.normalize(path.join(id, newNameAvatar))
+//     const avatarUrl = path.normalize(path.join(id, newNameAvatar))
 
-    try {
-        await fs.unlink(path.join(AVATARS_OF_USERS, req.user.avatar))
-    } catch (e) {
-        console.log(e.message)
-    }
-    return avatarUrl
-}
+//     try {
+//         await fs.unlink(path.join(AVATARS_OF_USERS, req.user.avatar))
+//     } catch (e) {
+//         console.log(e.message)
+//     }
+//     return avatarUrl
+// }
 
 module.exports.saveAvatarToCloud = async req => {
     const pathFile = req.file.path
@@ -47,7 +47,7 @@ module.exports.saveAvatarToCloud = async req => {
     try {
         await fs.unlink(pathFile)
     } catch (e) {
-        console.log('1111', e.message)
+        console.log(e)
     }
     return result
 }

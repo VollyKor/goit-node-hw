@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const contacts = [
     {
         _id: '604290563207180a6436ec46',
@@ -54,6 +56,9 @@ const User = {
     password: '$2a$08$70.UQLLAunkfzAczwr.M3OHSAewl9AtuwstKxscRK3B/NIdxFmM0m',
     createdAt: '2021-03-14T06:47:44.750Z',
     updatedAt: '2021-03-14T07:08:39.962Z',
+    validPassword: function (pass) {
+        return bcrypt.compareSync(pass, this.password)
+    },
 }
 
 const Users = [
@@ -72,6 +77,9 @@ const Users = [
             '$2a$08$70.UQLLAunkfzAczwr.M3OHSAewl9AtuwstKxscRK3B/NIdxFmM0m',
         createdAt: '2021-03-14T06:47:44.750Z',
         updatedAt: '2021-03-14T07:08:39.962Z',
+        validPassword: function (pass) {
+            return bcrypt.compareSync(pass, this.password)
+        },
     },
     {
         _id: '604db1902523ea15f8158df9',
@@ -87,6 +95,9 @@ const Users = [
             '$2a$08$70.UQLLAunkfzAczwr.M3OHSAewl9AtuwstKxscRK3B/NIdxFmM0m',
         createdAt: '2021-03-14T06:47:44.750Z',
         updatedAt: '2021-03-14T07:08:39.962Z',
+        validPassword: function (pass) {
+            return bcrypt.compareSync(pass, this.password)
+        },
     },
     {
         _id: '604db1902523ea15f8158df0',
@@ -102,8 +113,31 @@ const Users = [
             '$2a$08$70.UQLLAunkfzAczwr.M3OHSAewl9AtuwstKxscRK3B/NIdxFmM0m',
         createdAt: '2021-03-14T06:47:44.750Z',
         updatedAt: '2021-03-14T07:08:39.962Z',
+        validPassword: function (pass) {
+            return bcrypt.compareSync(pass, this.password)
+        },
     },
 ]
+
+const loginCredentials = {
+    email: 'img@test.com',
+    password: '123456',
+}
+
+const invalidLoginCredentials = {
+    email: 'img@test.com',
+    password: '163456',
+}
+
+const newUser = {
+    email: 'kolyaasd@gmail.com',
+    password: '123456',
+}
+
+const userWithUsedEmail = {
+    email: 'img@test.com',
+    password: '123456',
+}
 
 const userTemplate = {
     _id: '604db1902523ea15f8158df3',
@@ -118,7 +152,15 @@ const userTemplate = {
     updatedAt: '2021-03-14T07:08:39.962Z',
 }
 
+const invalidToken =
+    'eyJhb3ciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGRiMTkwMjUyM2VhMTVmODE1OGRmOCIsImlhdCI6MTYxNTcwNTcxOSwiZXhwIjoxNjE1NzEyOTE5fQ.DjyHzYGT5aypO4z9JgSfbk3mgKB9RoDnBJ7sBAvJ9DQ'
+
 module.exports = {
+    invalidToken,
+    invalidLoginCredentials,
+    loginCredentials,
+    userWithUsedEmail,
+    newUser,
     wrongId,
     contacts,
     Users,

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.03% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/29</span>
+                <span class='fraction'>8/16</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.03% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/29</span>
+                <span class='fraction'>8/16</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -118,13 +118,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,18 +125,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -171,33 +171,33 @@ const path = require('path')
 const Jimp = require('jimp')
 const createFolderIsExist = require('../utils/create-dir')
 &nbsp;
-module.exports.saveAvatarToStatic = <span class="fstat-no" title="function not covered" >as</span>ync req =&gt; {
-    const id = <span class="cstat-no" title="statement not covered" >req.user.id</span>
-    const avatarPath = <span class="cstat-no" title="statement not covered" >req.file.path</span>
-    const newNameFile = <span class="cstat-no" title="statement not covered" >`${Date.now()}-${req.file.originalname}`</span>
+// module.exports.saveAvatarToStatic = async req =&gt; {
+//     const id = req.user.id
+//     const avatarPath = req.file.path
+//     const newNameFile = `${Date.now()}-${req.file.originalname}`
 &nbsp;
-    const img = <span class="cstat-no" title="statement not covered" >await Jimp.read(avatarPath)</span>
-<span class="cstat-no" title="statement not covered" >    img.autocrop()</span>
-        .cover(
-            300,
-            300,
-            Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
-        )
-        .writeAsync(avatarPath)
+//     const img = await Jimp.read(avatarPath)
+//     img.autocrop()
+//         .cover(
+//             300,
+//             300,
+//             Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE,
+//         )
+//         .writeAsync(avatarPath)
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    await createFolderIsExist(path.join(AVATARS_OF_USERS, id))</span>
+//     await createFolderIsExist(path.join(AVATARS_OF_USERS, id))
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    await fs.rename(avatarPath, path.join(AVATARS_OF_USERS, id, newNameFile))</span>
+//     await fs.rename(avatarPath, path.join(AVATARS_OF_USERS, id, newNameFile))
 &nbsp;
-    const avatarUrl = <span class="cstat-no" title="statement not covered" >path.normalize(path.join(id, newNameAvatar))</span>
+//     const avatarUrl = path.normalize(path.join(id, newNameAvatar))
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >        await fs.unlink(path.join(AVATARS_OF_USERS, req.user.avatar))</span>
-    } catch (e) {
-<span class="cstat-no" title="statement not covered" >        console.log(e.message)</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return avatarUrl</span>
-}
+//     try {
+//         await fs.unlink(path.join(AVATARS_OF_USERS, req.user.avatar))
+//     } catch (e) {
+//         console.log(e.message)
+//     }
+//     return avatarUrl
+// }
 &nbsp;
 module.exports.saveAvatarToCloud = <span class="fstat-no" title="function not covered" >as</span>ync req =&gt; {
     const pathFile = <span class="cstat-no" title="statement not covered" >req.file.path</span>
@@ -212,7 +212,7 @@ module.exports.saveAvatarToCloud = <span class="fstat-no" title="function not co
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >        await fs.unlink(pathFile)</span>
     } catch (e) {
-<span class="cstat-no" title="statement not covered" >        console.log('1111', e.message)</span>
+<span class="cstat-no" title="statement not covered" >        console.log(e)</span>
     }
 <span class="cstat-no" title="statement not covered" >    return result</span>
 }
@@ -223,7 +223,7 @@ module.exports.saveAvatarToCloud = <span class="fstat-no" title="function not co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Mar 16 2021 00:00:32 GMT+0200 (Восточная Европа, стандартное время)
+                at Tue Mar 16 2021 17:00:02 GMT+0200 (Восточная Европа, стандартное время)
             </div>
         </div>
         <script src="../../prettify.js"></script>

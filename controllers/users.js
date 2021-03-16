@@ -10,7 +10,6 @@ const reg = async (req, res, next) => {
     try {
         const { email } = req.body
         const user = await Users.findByEmail(email)
-
         if (user) {
             return res.status(HttpCode.CONFLICT).json({
                 status: 'error',
@@ -41,6 +40,7 @@ const login = async (req, res, next) => {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
         const isValidPassword = await user?.validPassword(password)
+
         if (!user || !isValidPassword) {
             return res.status(HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -49,11 +49,13 @@ const login = async (req, res, next) => {
                 message: 'Invalid credentials',
             })
         }
+
         const id = user._id
         const payload = { id }
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
         await Users.updateToken(id, token)
         const { subscription, avatar } = user
+
         return res.status(HttpCode.OK).json({
             status: 'success',
             code: HttpCode.OK,
@@ -70,9 +72,13 @@ const login = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
-    const id = req.user.id
-    await Users.updateToken(id, null)
-    return res.status(HttpCode.NO_CONTENT).json()
+    try {
+        const id = req.user.id
+        await Users.updateToken(id, null)
+        return res.status(HttpCode.NO_CONTENT).json()
+    } catch (error) {
+        next(error)
+    }
 }
 
 const current = async (req, res, next) => {
@@ -95,6 +101,7 @@ const avatar = async (req, res, next) => {
 
         // cloudinary
         // ========================================
+
         const {
             public_id: imgIdCloud,
             secure_url: avatarUrl,
