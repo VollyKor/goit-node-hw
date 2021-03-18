@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const Users = require('../model/users')
 const { HttpCode } = require('../helpers/constants')
+const handleAvatar = require('../helpers/handleAvatar')
 
 require('dotenv').config()
 const SECRET_KEY = process.env.JWT_SECRET
@@ -9,7 +10,6 @@ const reg = async (req, res, next) => {
     try {
         const { email } = req.body
         const user = await Users.findByEmail(email)
-
         if (user) {
             return res.status(HttpCode.CONFLICT).json({
                 status: 'error',
@@ -19,14 +19,15 @@ const reg = async (req, res, next) => {
             })
         }
 
-        const newUser = await Users.create(req.body)
+        const { id, name, avatar, token } = await Users.create(req.body)
         return res.status(HttpCode.CREATED).json({
             status: 'success',
             code: HttpCode.CREATED,
             data: {
-                id: newUser.id,
-                email: newUser.email,
-                name: newUser.name,
+                id,
+                email,
+                name,
+                avatar,
             },
         })
     } catch (e) {
@@ -38,7 +39,8 @@ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
-        const isValidPassword = await user.validPassword(password)
+        const isValidPassword = await user?.validPassword(password)
+
         if (!user || !isValidPassword) {
             return res.status(HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -47,17 +49,21 @@ const login = async (req, res, next) => {
                 message: 'Invalid credentials',
             })
         }
+
         const id = user._id
         const payload = { id }
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
         await Users.updateToken(id, token)
+        const { subscription, avatar } = user
+
         return res.status(HttpCode.OK).json({
             status: 'success',
             code: HttpCode.OK,
             data: {
                 token,
-                email: user.email,
-                subscription: user.subscription,
+                email,
+                subscription,
+                avatar,
             },
         })
     } catch (e) {
@@ -66,19 +72,52 @@ const login = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
-    const id = req.user.id
-    await Users.updateToken(id, null)
-    return res.status(HttpCode.NO_CONTENT).json()
+    try {
+        const id = req.user.id
+        await Users.updateToken(id, null)
+        return res.status(HttpCode.NO_CONTENT).json()
+    } catch (error) {
+        next(error)
+    }
 }
 
 const current = async (req, res, next) => {
     const token = req.get('Authorization').slice(7)
-    const user = await Users.findByToken(token)
-    console.log(user)
+    const { email, subscription, avatar } = await Users.findByToken(token)
     return res.status(200).json({
-        email: user.email,
-        subscription: user.subscription,
+        email,
+        subscription,
+        avatar,
     })
 }
 
-module.exports = { reg, login, logout, current }
+const avatar = async (req, res, next) => {
+    try {
+        const id = req.user.id
+
+        //static
+        // ======================================
+        // const avatarUrl = await handleAvatar.saveAvatarToStatic(req)
+
+        // cloudinary
+        // ========================================
+
+        const {
+            public_id: imgIdCloud,
+            secure_url: avatarUrl,
+        } = await handleAvatar.saveAvatarToCloud(req)
+
+        await Users.updateAvatar(id, avatarUrl, imgIdCloud)
+        return res.json({
+            status: 'success',
+            code: HttpCode.OK,
+            data: {
+                avatarUrl,
+            },
+        })
+    } catch (e) {
+        next(e)
+    }
+}
+
+module.exports = { reg, login, logout, current, avatar }

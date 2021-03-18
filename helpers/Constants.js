@@ -1,3 +1,5 @@
+const path = require('path')
+
 const SUBSCRIPTION = {
     FREE: 'free',
     PRO: 'pro',
@@ -15,7 +17,20 @@ const HttpCode = {
     INTERNAL_SERVER_ERROR: 500,
 }
 
+const PUBLIC_FOLDER = 'public'
+const PUBLIC_IMAGES_FOLDER = 'images'
+const AVATARS_OF_USERS = path.join(
+    process.cwd(),
+    PUBLIC_FOLDER,
+    PUBLIC_IMAGES_FOLDER,
+)
+const UPLOAD_FOLDER = 'uploads'
+
 module.exports = {
     SUBSCRIPTION,
     HttpCode,
+    AVATARS_OF_USERS,
+    UPLOAD_FOLDER,
+    PUBLIC_FOLDER,
+    PUBLIC_IMAGES_FOLDER,
 }

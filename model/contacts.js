@@ -26,18 +26,21 @@ const getAll = async (
 }
 
 const getById = async (contactId, userId) =>
-    await Contact.findOne({ _id: contactId, owner: userId }).populate({
+    await Contact.findOne({
+        _id: contactId,
+        owner: userId,
+    }).populate({
         path: 'owner',
-        select: 'name, email -_id',
+        select: 'name, email _id',
     })
 
 const add = async contactObj => await Contact.create(contactObj)
 
 const remove = async id => await Contact.findByIdAndRemove({ _id: id })
 
-const update = async (id, contactObj) => {
+const update = async (id, contactObj, userId) => {
     return await Contact.findByIdAndUpdate(
-        { _id: id },
+        { _id: id, owner: userId },
         { ...contactObj },
         { new: true },
     )
