@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose')
 const path = require('path')
 const { SUBSCRIPTION } = require('../../helpers/constants')
 const bcrypt = require('bcryptjs')
+const { boolean } = require('joi')
 const SALT_WORK_FACTOR = 8
 const userSchema = new Schema(
     {
@@ -31,6 +32,14 @@ const userSchema = new Schema(
         token: {
             type: String,
             default: null,
+        },
+        verify: {
+            type: Boolean,
+            default: false,
+        },
+        verifyToken: {
+            type: String,
+            required: [true, 'Verify token required'],
         },
         avatar: {
             type: String,

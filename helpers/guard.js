@@ -10,6 +10,7 @@ const guard = (req, res, next) => {
             data: 'Unauthorized',
         })
     }
+
     passport.authenticate('jwt', { session: false }, (err, user) => {
         const token = req.get('Authorization')?.split(' ')[1]
         if (!user || err || token !== user.token) {
