@@ -24,7 +24,8 @@ class EmailService {
         }
     }
 
-    async sendEmail(verifyToken, email, name) {
+    async sendEmail(verifyToken, email) {
+        const name = 'new User'
         this.#sender.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
             to: email,
@@ -32,6 +33,7 @@ class EmailService {
             subject: 'Registration confirmation',
             dynamic_template_data: {
                 buttonLink: `${this.link}/api/users/verify/${verifyToken}`,
+                name,
             },
             template_id: process.env.SENDGRID_TEMPLATE_ID,
         }

@@ -47,4 +47,5 @@ module.exports = {
     updateAvatar,
     verify,
     findByVerifyToken,
+    updateVerifyToken,
 }

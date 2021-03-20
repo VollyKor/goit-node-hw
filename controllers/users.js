@@ -24,7 +24,7 @@ const reg = async (req, res, next) => {
         const verifyToken = nanoid()
         const emailService = new EmailService(process.env.NODE_ENV)
         await emailService.sendEmail(verifyToken, email, name)
-        console.log(verifyToken)
+
         const { id, avatar } = await Users.create({ ...req.body, verifyToken })
         return res.status(HttpCode.CREATED).json({
             status: 'success',
@@ -34,7 +34,6 @@ const reg = async (req, res, next) => {
                 email,
                 name,
                 avatar,
-                verifyToken,
             },
         })
     } catch (e) {
@@ -48,6 +47,15 @@ const login = async (req, res, next) => {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
         const isValidPassword = await user?.validPassword(password)
+
+        if (!user.verify) {
+            return res.status(HttpCode.UNAUTHORIZED).json({
+                status: 'error',
+                code: HttpCode.UNAUTHORIZED,
+                data: 'UNAUTHORIZED',
+                message: "Email isn't verifyed",
+            })
+        }
 
         if (!user || !isValidPassword || !user.verify) {
             return res.status(HttpCode.UNAUTHORIZED).json({
