@@ -70,12 +70,13 @@ const login = async (req, res, next) => {
         const payload = { id }
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
         await Users.updateToken(id, token)
-        const { subscription, avatar } = user
+        const { subscription, avatar, name } = user
 
         return res.status(HttpCode.OK).json({
             status: 'success',
             code: HttpCode.OK,
             data: {
+                name,
                 token,
                 email,
                 subscription,
@@ -99,11 +100,12 @@ const logout = async (req, res, next) => {
 
 const current = async (req, res, next) => {
     const token = req.get('Authorization').slice(7)
-    const { email, subscription, avatar } = await Users.findByToken(token)
+    const { email, subscription, avatar, name } = await Users.findByToken(token)
     return res.status(200).json({
         email,
         subscription,
         avatar,
+        name,
     })
 }
 
